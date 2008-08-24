@@ -1,0 +1,67 @@
+STORE	name
+	protocol	url
+	protocol	url
+	...
+	
+	
+REPOS	name
+	protocol	url
+	protocol	url
+	protocol	url
+	...
+
+
+STORE	eclipses
+	SCP	rus.yoursway.com:/srv/public/eclipses
+STORE	megabox-esko-builds
+	SCP	rus.yoursway.com:/srv/public/esko-builds
+	HTTP	http://rus.yoursway.com/download/esko-builds/
+STORE	s3-esko-builds
+	S3	...
+	HTTP	http://esko-builds.s3.amazonaws.com/
+REPOS	ys-taskus
+	GIT	0	ssh://yoursway.com/~andreyvit/taskus.git
+	GIT	50	ssh://megabox.local/~andreyvit/taskus.git
+REPOS	dltk
+	GIT	0	ssh://yoursway.com/~andreyvit/dltk-upstream.git
+	GIT	50	ssh://megabox.local/~andreyvit/dltk-upstream.git
+REPOS	ecabu
+	GIT	0	ssh://yoursway.com/~andreyvit/ecabu.git
+REPOS	continuous
+	GIT	0	ssh://yoursway.com/~andreyvit/continuous.git
+
+SET	ver	1.0.1237
+	
+ITEMD  	ys-taskus-source-[ver]	ys-taskus	tags/v[ver]	
+ITEMD	eclipse-sdk-3.4-mac	eclipses	3.4/eclipse-sdk-3.4-macosx-carbon.zip
+
+ITEMD	continuous-latest	continuous	heads/master
+ITEMF	ecabu-1.0	ecabu	heads/master
+	
+NEWITEMF	taskus-[ver]-setup.exe	-	Taskus [ver] for Windows (Setup)
+NEWITEMF	taskus-[ver].dmg	-	Taskus [ver] for Mac OS X
+
+NEWITEMD	taskus-[ver]-plugins	-	Taskus [ver] binary plugins
+
+INVOKERUBY	$(ecabu-1.0)/ecabu.rb
+	ARG	--source
+	ARG	$(ys-taskus-source-[ver])
+	ARG	--binary
+	ARG	$(eclipse-sdk-3.4-mac)/plugins
+	ARG	--output
+	ARG	$(taskus-[ver]-plugins)
+
+INVOKESHELL	$(continuous-latest)/build-dmg.sh
+	ARG	$(taskus-[ver].dmg)
+	ARG	$(taskus-[ver]-plugins)
+
+PUT	megabox-esko-builds	$(taskus-[ver].dmg)
+PUT	megabox-esko-builds	$(taskus-[ver]-setup.exe)
+
+TO	Publish Mac build to Amazon
+PUT	s3-esko-builds	$(taskus-[ver].dmg)
+
+TO	Publish Windows build to Amazon
+PUT	s3-esko-builds	$(taskus-[ver]-setup.exe)
+
+
