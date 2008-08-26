@@ -1,6 +1,11 @@
 SET	release-file-prefix	eclipse-osx-repackager-[ver]
 SET	release-descr-prefix	Eclipse OS X Repackager v[ver]
 
+SET	s3_key	1QPPZJR04QSS118WTS82
+SET	s3_secret	h+UDKBV8qzhRYMF/E5Rbbt35rQWVKLhqfqk7tgcY
+SET	s3	[s3_key]![s3_secret]
+
+
 GITREPOS	eclipse-osx-repackager
 	GIT	main	0	/Users/andreyvit/Projects/eclipse-osx-repackager/.git
 	
@@ -21,13 +26,18 @@ NEWDIR	product-ui.app	temp	[release-descr-prefix] application bundle
 ALIAS	product-ui.dmg	[release-file-prefix].dmg
 NEWFILE	product-ui.dmg	featured	[release-descr-prefix] for Mac OS X
 
-STORE	megabox-public	featured,public	rus.yoursway.com
+STORE	megabox-public	featured,public	rus.yoursway.com (aka megabox)
 	SCP	public	rus.yoursway.com:/home/share/builds-public
 	HTTP	public	http://rus.yoursway.com:8888/public-builds
+
+STORE	eclipse-osx-repackager-builds-s3	featured,public	Amazon S3 (bucket “eclipse-osx-repackager-builds-s3”)
+	S3	public	[s3]!yoursway-eclipse-osx-repackager-builds:
+	HTTP	public	http://yoursway-eclipse-osx-repackager-builds.s3.amazonaws.com
 
 INVOKE	[source.cur]/build/build-crossplatform-zip	[product-core.zip]	[build.dir]	[source.cur]
 
 PUT	megabox-public	product-core.zip
+PUT	eclipse-osx-repackager-builds-s3	product-core.zip
 
 SAY	done
 
