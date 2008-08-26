@@ -1,15 +1,19 @@
-STORE	name
-	protocol	url
-	protocol	url
-	...
+GITREPOS	test
+	GIT	main	0	/Users/andreyvit/Projects/test/.git
 	
-	
-REPOS	name
-	protocol	url
-	protocol	url
-	protocol	url
-	...
+VERSION	test.cur	test	heads/master
 
+ALIAS	build.dir	[project]-[ver]-build
+ALIAS	build.log	[project]-[ver]-build.log
+
+NEWDIR	build.dir	temp	-
+NEWFILE	build.log	log	-
+
+INVOKE	[test.cur]/bar	[[project]-[ver]-build]	[[project]-[ver]-build.log]
+
+SAY	[project-name] [ver] is built.
+
+------------------------------------------------------------------------------------------------------------
 
 STORE	eclipses
 	SCP	rus.yoursway.com:/srv/public/eclipses
@@ -29,18 +33,6 @@ REPOS	ecabu
 	GIT	0	ssh://yoursway.com/~andreyvit/ecabu.git
 REPOS	continuous
 	GIT	0	ssh://yoursway.com/~andreyvit/continuous.git
-
-SET	ver	1.0.1237
-
-GITREPOS	test
-	GIT	main	0	/Users/andreyvit/Projects/test/.git
-	
-VERSION	test.cur	test	heads/master
-
-NEWDIR	[project]-[ver]-build	temp	-
-NEWFILE	[project]-[ver]-build.log	log	-
-
-INVOKE	[test.cur]/bar	[[project]-[ver]-build]	[[project]-[ver]-build.log]
 	
 ITEMD  	ys-taskus-source-[ver]	ys-taskus	tags/v[ver]	
 ITEMD	eclipse-sdk-3.4-mac	eclipses	3.4/eclipse-sdk-3.4-macosx-carbon.zip
