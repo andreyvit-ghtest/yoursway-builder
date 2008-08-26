@@ -21,7 +21,15 @@ NEWDIR	product-ui.app	temp	[release-descr-prefix] application bundle
 ALIAS	product-ui.dmg	[release-file-prefix].dmg
 NEWFILE	product-ui.dmg	featured	[release-descr-prefix] for Mac OS X
 
+STORE	megabox-public	featured,public	rus.yoursway.com
+	SCP	public	rus.yoursway.com:/home/share/builds-public
+	HTTP	public	http://rus.yoursway.com:8888/public-builds
+
 INVOKE	[source.cur]/build/build-crossplatform-zip	[product-core.zip]	[build.dir]	[source.cur]
+
+PUT	megabox-public	product-core.zip
+
+SAY	done
 
 SAY	[project-name] [ver] is built.
 
