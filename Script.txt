@@ -31,6 +31,16 @@ REPOS	continuous
 	GIT	0	ssh://yoursway.com/~andreyvit/continuous.git
 
 SET	ver	1.0.1237
+
+GITREPOS	test
+	GIT	main	0	/Users/andreyvit/Projects/test/.git
+	
+VERSION	test.cur	test	heads/master
+
+NEWDIR	[project]-[ver]-build	temp	-
+NEWFILE	[project]-[ver]-build.log	log	-
+
+INVOKE	[test.cur]/bar	[[project]-[ver]-build]	[[project]-[ver]-build.log]
 	
 ITEMD  	ys-taskus-source-[ver]	ys-taskus	tags/v[ver]	
 ITEMD	eclipse-sdk-3.4-mac	eclipses	3.4/eclipse-sdk-3.4-macosx-carbon.zip
