@@ -1,15 +1,27 @@
-GITREPOS	test
-	GIT	main	0	/Users/andreyvit/Projects/test/.git
+SET	release-file-prefix	eclipse-osx-repackager-[ver]
+SET	release-descr-prefix	Eclipse OS X Repackager v[ver]
+
+GITREPOS	eclipse-osx-repackager
+	GIT	main	0	/Users/andreyvit/Projects/eclipse-osx-repackager/.git
 	
-VERSION	test.cur	test	heads/master
+VERSION	source.cur	eclipse-osx-repackager	heads/master
 
-ALIAS	build.dir	[project]-[ver]-build
-ALIAS	build.log	[project]-[ver]-build.log
-
+ALIAS	build.dir	eclipse-osx-repackager-[ver]-build
 NEWDIR	build.dir	temp	-
+
+ALIAS	build.log	eclipse-osx-repackager-[ver]-build.log
 NEWFILE	build.log	log	-
 
-INVOKE	[test.cur]/bar	[[project]-[ver]-build]	[[project]-[ver]-build.log]
+ALIAS	product-core.zip	[release-file-prefix].zip
+NEWFILE	product-core.zip	featured	[release-descr-prefix] cross-platform console tool
+
+ALIAS	product-ui.app	[release-file-prefix]-app
+NEWDIR	product-ui.app	temp	[release-descr-prefix] application bundle
+
+ALIAS	product-ui.dmg	[release-file-prefix].dmg
+NEWFILE	product-ui.dmg	featured	[release-descr-prefix] for Mac OS X
+
+INVOKE	[source.cur]/build/build-crossplatform-zip	[product-core.zip]	[build.dir]	[source.cur]
 
 SAY	[project-name] [ver] is built.
 
